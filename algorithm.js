@@ -1,4 +1,4 @@
-let array = [45, 45, 4, 45, 5];
+let array = [10, 9, 8, 5, 6, 12];
 
 for (let i = 0; i < array.length; i++) {
     let currMin = array[i];

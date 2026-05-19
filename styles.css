@@ -8,6 +8,11 @@ img {
     border-radius: 3%;
 }
 
+#playerCommits img {
+    width: 77.25px;
+    height: 120px;
+}
+
 #playerContainer img:hover {
     transform: scale(1.015);
 }
@@ -19,4 +24,8 @@ img {
 button {
     width: 150px;
     height: 50px;
+}
+
+h3 {
+    color: white;
 }

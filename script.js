@@ -133,15 +133,6 @@ function opponentPlay() {
 	let cpuValues = [];
 	let cpuTypes = [];
 
-	for (let i = 0; i < cpuDeck.length; i++) {
-		let currCard = cpuDeck[i];
-		let split = currCard.split("-");
-		let value = split[0];
-		let type = split[1];
-		cpuValues.push(value);
-		cpuTypes.push(Types);
-	}
-
 	sortCards(cpuDeck, cpuValues, cpuTypes);
 	console.log(cpuValues);
 	console.log(cpuTypes);
@@ -169,7 +160,6 @@ function sortCards(array, values, types) {
 		else {
 			value = parseInt(value);
 		}
-		
 		values.push(value);
 		types.push(type);
 	}	
@@ -187,7 +177,15 @@ function sortCards(array, values, types) {
 	    let temp = values[i];
 	    values[i] = currMin;
 	    values[index] = temp;
+
+		let typeTemp = types[i];
+		types[i] = types[index];
+		types[index] = typeTemp;
+
 	}
+
+	console.log(values);
+	console.log(types);
 }
 
 function validateCards() {
@@ -200,7 +198,6 @@ function validateCards() {
 	console.log(values);
 	console.log(types);
 	
-
 	let isSameNum = checkIfIsSameNumber(values);
 	let isInOrder;
 
@@ -217,7 +214,7 @@ function validateCards() {
 	console.log(isSameNum);
 
 	if (isInOrder || isSameNum) {
-		removeElements();
+		removeElements(values, types);
 		if (isTaking) {
 			let newCard = deck.pop();
 			currCardImg.id = newCard;
@@ -229,12 +226,26 @@ function validateCards() {
 
 }
 
-function removeElements() {
+function removeElements(values, types) {
 	//update player array deck
 	for (let i = 0; i < commitArray.length; i++) {
+
 		let index = player1Deck.indexOf(commitArray[i]);
 		console.log(commitArray[i]);
 		let divId = document.getElementById(commitArray[i]);
+
+		if (values[i] == 11) {
+			values[i] = 'Q';
+		}
+		else if (values[i] == 12) {
+			values[i] = 'K';
+		}
+
+		let commits = document.getElementById("playerCommits");
+		let cardImg = document.createElement("img");
+		cardImg.id = `${values[i]}-${types[i]}`;
+		cardImg.src = `./cards/${cardImg.id}.png`;
+		commits.appendChild(cardImg);
 		console.log(divId);
 		if (index != -1) {
 			document.getElementById("playerContainer").removeChild(divId);
@@ -298,7 +309,6 @@ function commitFunction(card) {
 
 		validateButton.addEventListener("click", validateCards);
 	}
-
 }
 
 function buildDeck() {

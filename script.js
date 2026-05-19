@@ -8,6 +8,9 @@ let isOpponentTurn = false;
 let isFirstTrade = true;
 let isCommitting = false;
 let isTaking = false;
+let player1 = 0;
+let cpuPlayer = 1;
+let playerTurn = player1;
 
 //game decks and arrays
 let deck = [];
@@ -90,13 +93,15 @@ function cardFunctionality() {
 		
 		//commit button activation
 		commitButton.addEventListener("click", () => {
-			commitArray = [];
-			isCommitting = true;
+			if (!isOpponentTurn) {
+				commitArray = [];
+				isCommitting = true;
+			}
 		});	
 		
 		//take button activation
 		takeCardButton.addEventListener("click", () => {
-			if (!isCommitting && !isFirstTrade) {
+			if (!isCommitting && !isFirstTrade && !isOpponentTurn) {
 				//resert commit array
 				commitArray = [];
 
@@ -111,20 +116,42 @@ function cardFunctionality() {
 				count++;
 			}
 		});
+
+		//if its opponent turn click the button
+		opponentTurn.addEventListener("click", () => {
+			opponentPlay();
+			isOpponentTurn = false;
+		})
 	}	
-	else if (!isFirstTrade && isCommitting) {
+	else if (!isFirstTrade && isCommitting && !isOpponentTurn) {
 		commitFunction(this);
 	}
 }
 
-function validateCards() {
+function opponentPlay() {
 
-	isCommitting = false;
-	let values = [];
-	let types = [];
+	let cpuValues = [];
+	let cpuTypes = [];
 
-	for (let i = 0; i < commitArray.length; i++) {
-		let splitValues = commitArray[i].split("-");
+	for (let i = 0; i < cpuDeck.length; i++) {
+		let currCard = cpuDeck[i];
+		let split = currCard.split("-");
+		let value = split[0];
+		let type = split[1];
+		cpuValues.push(value);
+		cpuTypes.push(Types);
+	}
+
+	sortCards(cpuDeck, cpuValues, cpuTypes);
+	console.log(cpuValues);
+	console.log(cpuTypes);
+
+}
+
+function sortCards(array, values, types) {
+	
+	for (let i = 0; i < array.length; i++) {
+		let splitValues = array[i].split("-");
 		console.log(splitValues);
 
 		let value = splitValues[0];
@@ -161,7 +188,19 @@ function validateCards() {
 	    values[i] = currMin;
 	    values[index] = temp;
 	}
+}
+
+function validateCards() {
+
+	isCommitting = false;
+	let values = [];
+	let types = [];
 	
+	sortCards(commitArray, values, types);
+	console.log(values);
+	console.log(types);
+	
+
 	let isSameNum = checkIfIsSameNumber(values);
 	let isInOrder;
 
@@ -177,17 +216,15 @@ function validateCards() {
 	console.log(isInOrder);
 	console.log(isSameNum);
 
-	if ( (isInOrder || isSameNum) && !isTaking) {
-		console.log("Branch1");
+	if (isInOrder || isSameNum) {
 		removeElements();
-	}
-	else if ( (isInOrder || isSameNum) && isTaking) {
-		console.log("Branch2");
-		removeElements();
-		let newCard = deck.pop();
-		currCardImg.id = newCard;
-		currCardImg.src = `./cards/${newCard}.png`;
-		isTaking = false;
+		if (isTaking) {
+			let newCard = deck.pop();
+			currCardImg.id = newCard;
+			currCardImg.src = `./cards/${newCard}.png`;
+			isTaking = false;
+		}
+		isOpponentTurn = true;
 	}
 
 }

@@ -2,6 +2,7 @@ let val = [0, 1, 3, 3, 5, 10, 10, 11];
 let typ = ['S', 'C', 'D', 'C', 'H', 'S', 'S', 'C'];
 let matches = [];
 let array = [];
+let github_test;
 
 let count = 0;
 for (let i = 0; i < val.length; i++) {

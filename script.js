@@ -130,14 +130,25 @@ function cardFunctionality() {
 
 function opponentPlay() {
 
+	let splitCard = currCardImg.id.split("-");
+	let currValue = splitCard[0];
+	let currType = splitCard[1];
+
 	let cpuValues = [];
 	let cpuTypes = [];
 
-	let arrayMatches = [];
 	sortCards(cpuDeck, cpuValues, cpuTypes);
 
-	arrayMatches = checkOpponentSequence(cpuValues, cpuTypes, arrayMatches);
-	console.log(arrayMatches);
+	let sameNumbersFound = checkOpponentSequence(cpuValues, cpuTypes, sameNumbersFound);
+	
+	for (let i = 0; i < sameNumbersFound.length; i++) {
+		if (sameNumbersFound[i].length > 2) {
+			console.log("Possible Commit");
+		}
+	}
+
+
+	console.log(sameNumbersFound);
 }
 
 function checkOpponentSequence(val, typ, array) {
@@ -169,7 +180,7 @@ function sortCards(array, values, types) {
 	
 	for (let i = 0; i < array.length; i++) {
 		let splitValues = array[i].split("-");
-		console.log(splitValues);
+		// console.log(splitValues);
 
 		let value = splitValues[0];
 		let type = splitValues[1];

@@ -1,17 +1,29 @@
-let array = [10, 9, 8, 5, 6, 12];
+let val = [1, 1, 3, 3, 5, 10, 10, 11];
+let typ = ['S', 'C', 'D', 'C', 'H', 'S', 'S', 'C'];
+let matches = [];
+let array = [];
 
-for (let i = 0; i < array.length; i++) {
-    let currMin = array[i];
-    let index = i;
-    for (let j = i; j < array.length; j++) {
-        if (array[j] < currMin) {
-            currMin = array[j];
-            index = j;
-        }
+let count = 0;
+for (let i = 0; i < val.length; i++) {
+    if (count == 0) {
+        matches.push(`${val[i]}-${typ[i]}`);
     }
-    let temp = array[i];
-    array[i] = currMin;
-    array[index] = temp;
+
+    if ( (i != (val.length - 1)) && (val[i] == val[i + 1]) ) {
+        matches.push(`${val[i]}-${typ[i + 1]}`);
+        count++;
+    }
+    else {
+        if (count > 0) {
+            array.push(matches);
+        }
+        count = 0;
+        matches = [];
+    }
+
+    if (count > 0) {
+        console.log(`Num: ${val[i]} | count = ${count}`);
+    }
 }
 
 console.log(array);

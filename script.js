@@ -119,8 +119,8 @@ function cardFunctionality() {
 
 		//if its opponent turn click the button
 		opponentTurn.addEventListener("click", () => {
-			opponentPlay();
 			isOpponentTurn = false;
+			setTimeout(opponentPlay, 1500);
 		})
 	}	
 	else if (!isFirstTrade && isCommitting && !isOpponentTurn) {
@@ -133,10 +133,36 @@ function opponentPlay() {
 	let cpuValues = [];
 	let cpuTypes = [];
 
+	let arrayMatches = [];
 	sortCards(cpuDeck, cpuValues, cpuTypes);
-	console.log(cpuValues);
-	console.log(cpuTypes);
 
+	arrayMatches = checkOpponentSequence(cpuValues, cpuTypes, arrayMatches);
+	console.log(arrayMatches);
+}
+
+function checkOpponentSequence(val, typ, array) {
+	
+	let count = 0;
+	let matches = [];
+
+	for (let i = 0; i < val.length; i++) {
+		if (count == 0) {
+			matches.push(`${val[i]}-${typ[i]}`);
+		}
+
+		if ( (i != (val.length - 1)) && (val[i] == val[i + 1]) ) {
+			matches.push(`${val[i]}-${typ[i + 1]}`);
+			count++;
+		}
+		else {
+			if (count > 0) {
+				array.push(matches);
+			}
+			count = 0;
+			matches = [];
+		}
+	}	
+	return array;
 }
 
 function sortCards(array, values, types) {

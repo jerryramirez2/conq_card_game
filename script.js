@@ -131,24 +131,85 @@ function cardFunctionality() {
 function opponentPlay() {
 
 	let splitCard = currCardImg.id.split("-");
-	let currValue = splitCard[0];
+	let currValue = getCardValue(splitCard[0]);
 	let currType = splitCard[1];
+
+	console.log(currValue);
 
 	let cpuValues = [];
 	let cpuTypes = [];
+	let sameNumbersFound = [];
+
+	let optionArray = [];
 
 	sortCards(cpuDeck, cpuValues, cpuTypes);
 
-	let sameNumbersFound = checkOpponentSequence(cpuValues, cpuTypes, sameNumbersFound);
+	sameNumbersFound = checkOpponentSequence(cpuValues, cpuTypes, sameNumbersFound);
+	optionArray = checkOppGame(currValue, sameNumbersFound, optionArray);
+
+	if (!(optionArray.length == 0) ) {
+		removeOppElements(optionArray);		
+	}
+
+	console.log(optionArray);
+}
+
+function removeOppElements(array) {
+
 	
-	for (let i = 0; i < sameNumbersFound.length; i++) {
-		if (sameNumbersFound[i].length > 2) {
-			console.log("Possible Commit");
+}
+
+function checkOppGame(currValue, currType, sortedArray, optionArray) {
+
+	let array = [];
+	for (let i = 0; i < sortedArray.length; i++) {
+		array = [];
+		console.log(sortedArray[i]);
+		if (sortedArray[i].length > 1) {
+			for (let j = 0; j < sortedArray[i].length; j++) {
+				let card = sortedArray[i][j].split("-");
+				let cardVal = card[0];
+				let cardType = card[1];
+				if (j == 0) {
+					array.push(`${getCardValue(cardVal)}-${cardType}`);
+				}
+
+				if (cardVal == currValue) {
+					let reassignValue = getCardValue(currValue);
+					array.push(`${reassignValue}-${cardType}`);
+				}
+			}
+		}
+		if(array.length > 2) {
+			optionArray.push(array)
 		}
 	}
 
+	return optionArray;
+}
 
-	console.log(sameNumbersFound);
+function getCardValue(value) {
+	if (value == 'K') {
+		return 12;
+	}
+	else if (value == 'Q') {
+		return 11;
+	}
+	else if (value == 'A') {
+		return 1;
+	}
+	else if (value == 12) {
+		return 'K';
+	}
+	else if (value == 11) {
+		return 'Q';
+	}
+	else if (value == 1) {
+		return 'A';
+	}
+	else {
+		return parseInt(value);
+	}
 }
 
 function checkOpponentSequence(val, typ, array) {
@@ -182,21 +243,9 @@ function sortCards(array, values, types) {
 		let splitValues = array[i].split("-");
 		// console.log(splitValues);
 
-		let value = splitValues[0];
+		let value = getCardValue(splitValues[0]);
 		let type = splitValues[1];
 
-		if (value == 'Q') {
-			value = 11;
-		}
-		else if (value == 'A') {
-			value = 1;
-		}
-		else if (value == 'K') {
-			value = 12;
-		}
-		else {
-			value = parseInt(value);
-		}
 		values.push(value);
 		types.push(type);
 	}	
@@ -265,31 +314,29 @@ function validateCards() {
 
 function removeElements(values, types) {
 	//update player array deck
-	for (let i = 0; i < commitArray.length; i++) {
 
-		let index = player1Deck.indexOf(commitArray[i]);
-		console.log(commitArray[i]);
-		let divId = document.getElementById(commitArray[i]);
+	if (!isOpponentTurn) {
+		for (let i = 0; i < commitArray.length; i++) {
 
-		if (values[i] == 11) {
-			values[i] = 'Q';
-		}
-		else if (values[i] == 12) {
-			values[i] = 'K';
-		}
+			let index = player1Deck.indexOf(commitArray[i]);
+			console.log(commitArray[i]);
+			let divId = document.getElementById(commitArray[i]);
 
-		let commits = document.getElementById("playerCommits");
-		let cardImg = document.createElement("img");
-		cardImg.id = `${values[i]}-${types[i]}`;
-		cardImg.src = `./cards/${cardImg.id}.png`;
-		commits.appendChild(cardImg);
-		console.log(divId);
-		if (index != -1) {
-			document.getElementById("playerContainer").removeChild(divId);
-			player1Deck.splice(index, 1);
+			values[i] = getCardValue(values[i]);
+
+			let commits = document.getElementById("playerCommits");
+			let cardImg = document.createElement("img");
+			cardImg.id = `${values[i]}-${types[i]}`;
+			cardImg.src = `./cards/${cardImg.id}.png`;
+			commits.appendChild(cardImg);
+			console.log(divId);
+			if (index != -1) {
+				document.getElementById("playerContainer").removeChild(divId);
+				player1Deck.splice(index, 1);
+			}
 		}
+		commitArray = [];
 	}
-	commitArray = [];
 }
 
 function checkIfIsInOrder(values, types) {

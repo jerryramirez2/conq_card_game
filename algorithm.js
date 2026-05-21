@@ -1,4 +1,4 @@
-let currValue = 6;
+let currValue = 1;
 let currType = 'C';
 
 let sortedArray = [
@@ -9,7 +9,7 @@ let sortedArray = [
 
 let optionArray = [];
 
-function checkOppGame(currValue, currType, sortedArray, optionArray) {
+function getOppSeqPlay(currValue, currType, sortedArray, optionArray) {
 
     for (let i = 0; i < sortedArray.length; i++) {
         if (sortedArray.length > 1) {

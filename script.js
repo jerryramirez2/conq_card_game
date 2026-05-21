@@ -145,47 +145,28 @@ function opponentPlay() {
 	sortCards(cpuDeck, cpuValues, cpuTypes);
 
 	sameNumbersFound = checkOpponentSequence(cpuValues, cpuTypes, sameNumbersFound);
-	optionArray = checkOppGame(currValue, sameNumbersFound, optionArray);
-
-	if (!(optionArray.length == 0) ) {
-		removeOppElements(optionArray);		
-	}
+	optionArray = getOppSeqPlay(currValue, currType, sameNumbersFound, optionArray);
 
 	console.log(optionArray);
 }
 
-function removeOppElements(array) {
+function getOppSeqPlay(currValue, currType, sortedArray, optionArray) {
 
-	
-}
+    for (let i = 0; i < sortedArray.length; i++) {
+        if (sortedArray.length > 1) {
+            let card = sortedArray[i][0].split("-");
+            let val = card[0];
 
-function checkOppGame(currValue, currType, sortedArray, optionArray) {
+            if (currValue == val) {
+                sortedArray[i].push(`${currValue}-${currType}`);
+            }
+        }
+        if (sortedArray[i].length > 2) {
+            optionArray.push(sortedArray[i]);
+        }
+    }
 
-	let array = [];
-	for (let i = 0; i < sortedArray.length; i++) {
-		array = [];
-		console.log(sortedArray[i]);
-		if (sortedArray[i].length > 1) {
-			for (let j = 0; j < sortedArray[i].length; j++) {
-				let card = sortedArray[i][j].split("-");
-				let cardVal = card[0];
-				let cardType = card[1];
-				if (j == 0) {
-					array.push(`${getCardValue(cardVal)}-${cardType}`);
-				}
-
-				if (cardVal == currValue) {
-					let reassignValue = getCardValue(currValue);
-					array.push(`${reassignValue}-${cardType}`);
-				}
-			}
-		}
-		if(array.length > 2) {
-			optionArray.push(array)
-		}
-	}
-
-	return optionArray;
+    return optionArray;
 }
 
 function getCardValue(value) {
@@ -416,3 +397,4 @@ function shuffleDeck() {
 		deck[j] = temp;
 	}
 }
+

@@ -3,8 +3,7 @@ let currType = 'C';
 
 let sortedArray = [
     ['6-D', '6-H'],
-    ['11-C', '11-D', '11-H'],
-    ['A-S'] 
+    ['11-C', '11-D', '11-H']
 ];
 
 let optionArray = [];

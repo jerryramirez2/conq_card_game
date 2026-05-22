@@ -147,18 +147,59 @@ function opponentPlay() {
 	sameNumbersFound = checkOpponentSequence(cpuValues, cpuTypes, sameNumbersFound);
 	optionArray = getOppSeqPlay(currValue, currType, sameNumbersFound, optionArray);
 
-	console.log(optionArray);
+	console.log(optionArray)
+
+	if (optionArray.length > 0) {
+		removeOppElements(optionArray[0]);
+	}
+
 }
+
+function removeOppElements(array) {
+
+	let container = document.getElementById("oppCommits");	
+	console.log(array);
+	for (let i = 0; i < array.length; i++) {
+		
+		if (array[i] != currCardImg.id) {
+			let cardID = array[i];
+			let cardIMG = document.getElementById(cardID);
+			cardIMG.src = `./cards/${cardID}.png`;
+			console.log(cardIMG);
+			container.appendChild(cardIMG);
+		}
+		else {
+			let tempContainer = document.createElement("img");
+			tempContainer.id = array[i];  
+			tempContainer.src = `./cards/${array[i]}.png`; 
+			tempContainer.className = "commit";
+			container.appendChild(tempContainer);
+			
+			currCardImg.id = deck.pop();
+			currCardImg.src = `./cards/${currCardImg.id}`;
+			return;
+		}
+	}
+
+	let card = deck.pop();
+	currCardImg.id = card;
+	currCardImg.src = `./cards/${card}.png`;
+
+}
+
 
 function getOppSeqPlay(currValue, currType, sortedArray, optionArray) {
 
-    for (let i = 0; i < sortedArray.length; i++) {
-        if (sortedArray.length > 1) {
+	console.log(sortedArray)
+	for (let i = 0; i < sortedArray.length; i++) {
+        if (sortedArray.length[i] > 1) {
             let card = sortedArray[i][0].split("-");
             let val = card[0];
-
+			console.log(val);
             if (currValue == val) {
-                sortedArray[i].push(`${currValue}-${currType}`);
+				let newVal = getCardValue(val);
+                sortedArray[i].push(`${val}-${currType}`);
+				console.log(sortedArray[i]);
             }
         }
         if (sortedArray[i].length > 2) {
